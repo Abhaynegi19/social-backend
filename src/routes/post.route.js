@@ -63,6 +63,36 @@ router.get("/:id", isLoggedIn, async(req, res) => {
     }
 })
 
+router.delete("/:postId", isLoggedIn, async (req, res) => {
+    try {
+        const { postId } = req.params
+        const foundUser = req.user
+
+        const post = await Post.findById(postId)
+
+        if (!post) {
+           throw new Error("Post not found")
+        }
+
+        if (post.authorId.toString() !== foundUser._id.toString()) {
+            throw new Error("You are not authorized to perform this action")
+        }
+
+        await Post.findByIdAndDelete(postId)
+
+        res.status(200).json({
+            success: true,
+            message: "Post deleted successfully"
+        })
+
+    } catch (error) {
+        res.status(400).json({
+            success: false,
+            message: error.message
+        })
+    }
+})
+
 
 
 
