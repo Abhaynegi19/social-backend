@@ -48,14 +48,11 @@ router.post("/create-comment", isLoggedIn, async(req, res) => {
     }
 })
 
-
-router.delete("/delete-comment/:id", isLoggedIn, async (req, res) => {
-  try 
-  {
+router.delete("/:id", isLoggedIn, async (req, res) => {
+  try {
     const comment = await Comment.findById(req.params.id);
 
-    if (!comment) 
-    {
+    if (!comment) {
       throw new Error("Comment not found");
     }
 
@@ -67,10 +64,14 @@ router.delete("/delete-comment/:id", isLoggedIn, async (req, res) => {
 
     if (!isCommentOwner && !isPostOwner) 
     {
-      throw new Error("You are not authorized to delete this comment")
+      throw new Error("You are not authorized to delete this comment");
     }
 
-    await Comment.findByIdAndDelete(req.params.id);
+    await Post.findByIdAndUpdate(comment.postId, {
+      $pull: {comments: comment._id},
+    });
+
+    await Comment.findByIdAndDelete(comment._id);
 
     res.status(200).json({
       success: true,
