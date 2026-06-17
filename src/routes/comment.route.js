@@ -30,7 +30,7 @@ router.post("/create-comment", isLoggedIn, async(req, res) => {
               postId
               })
 
-              Post.comments.push(newComment._id)
+              post.comments.push(newComment._id)
               await post.save()
 
               res.status(201).json({
