@@ -166,7 +166,7 @@ router.patch("/follow/:userId",isLoggedIn,async(req,res)=>{
 
         if(alreadyFollowing)
         {
-            foundUser.following.filter((user)=>{
+            foundUser.following = foundUser.following.filter((user)=>{
                 return user.toString() !== userId
             })
 
