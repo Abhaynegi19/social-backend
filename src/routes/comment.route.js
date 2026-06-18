@@ -97,7 +97,7 @@ router.patch("/like/:id", isLoggedIn, async (req, res) => {
       throw new Error("Comment not found")
     }
 
-    const alreadyLiked = comment.likes.findById((id) => id.toString() == userId.toString()
+    const alreadyLiked = comment.likes.some((id) => id.toString() == userId.toString()
     )
 
     if (alreadyLiked) {
