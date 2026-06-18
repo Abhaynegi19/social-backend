@@ -8,7 +8,7 @@ const userSchema = new mongoose.Schema(
       unique: true,
       trim: true,
       lowercase: true,
-      immutable : true
+      immutable: true,
     },
 
     password: {
@@ -21,55 +21,42 @@ const userSchema = new mongoose.Schema(
       required: true,
       unique: true,
       trim: true,
-      minLength : 2,
-      maxLength : 12,
-      immutable : true
-
+      minLength: 2,
+      maxLength: 12,
+      immutable: true,
     },
 
     firstName: {
       type: String,
       trim: true,
-      minLength : 2,
-      
-
+      minLength: 2,
     },
 
     lastName: {
       type: String,
       trim: true,
-
     },
 
     dateOfBirth: {
       type: String,
-      // immutable : true
-
     },
 
     gender: {
       type: String,
-      // immutable : true,
-      enum : ["male", "female", "others"]
+      enum: ["male", "female", "others"],
     },
 
     followers: [
-      {
-          type: mongoose.Schema.Types.ObjectId,
-          ref: "User",
-      }
     ],
 
-    following: [{
-        type: mongoose.Schema.Types.ObjectId,
-        ref: "User",
-    }],
+    following: [
+    ],
 
     posts: [
       {
-        type : mongoose.Schema.Types.ObjectId,
-        ref : "Post"
-      }
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "Post",
+      },
     ],
 
     displayPicture: {
@@ -93,6 +80,5 @@ const userSchema = new mongoose.Schema(
   }
 );
 
-// module.exports = mongoose.model("User", userSchema);
-const User = mongoose.model("User", userSchema)
-module.exports = { User }
+const User = mongoose.model("User", userSchema);
+module.exports = { User };
