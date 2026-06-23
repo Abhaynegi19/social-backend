@@ -216,7 +216,7 @@ router.get("/search", isLoggedIn, async (req, res) => {
                 })
             }
 
-            const Users = User.find({
+            const users = User.find({
                 username : {$regex : query, $options : "i"} 
             })
             .select("username firstName lastName displayPicture")
