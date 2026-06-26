@@ -240,8 +240,6 @@ router.get("/search", isLoggedIn, async (req, res) => {
 
 })
 
-<<<<<<< HEAD
-=======
 router.get("/:id", isLoggedIn, async(req, res) => {
     try {
         const {id} = req.params
