@@ -240,24 +240,34 @@ router.get("/search", isLoggedIn, async (req, res) => {
 
 })
 
-router.get("/profile/:id",isLoggedIn,async(req,res) =>{
+router.get("/:id", isLoggedIn, async(req, res) => {
     try {
-        const foundUser = req.user
         const {id} = req.params
+        const foundUser = req.user
 
-        if(id == foundUser._id){
-            res.status(400).json({
-                data : null
-            })
+        const user = await User.findById(id)
+        .select("username firstName lastName dateOfBirth followers following posts displayPicture bio ")
+        .populate("posts")
+
+        if(!user)
+        {
+            throw new Error("User not found")
         }
 
+         const isFollowing = user.followers.some(
+            (followerId) => followerId.toString() === user.id
+        )
+
         res.status(200).json({
-            status : "success",
-            data : foundUser
+            success: true,
+            data : {
+                ...user.toObject(),
+                isFollowing
+            }
         })
     } catch (error) {
-        res.status(400).json({
-            status : "failed"
+         res.status(404).json({
+            err: error.message
         })
     }
 })
