@@ -204,6 +204,43 @@ router.patch("/follow/:userId",isLoggedIn,async(req,res)=>{
     }
 })
 
+router.get("/search", isLoggedIn, async (req, res) => {
+    try {
+            const {query, skip} = req.query
+            const foundUser = req.user
+
+            if(!query || query.trim() === "")
+            {
+                return res.status(200).json({
+                    sucess : true,
+                    data : []
+                })
+            }
+
+            const users = await User.find({
+                username : {$regex : query, $options : "i"},
+                _id : {$ne : foundUser.id} 
+            })
+            .select("username firstName lastName displayPicture")
+            .limit(5)
+            .skip(skip)
+
+            res.status(200).json({
+                sucess : true,
+                msg: "Users fetched",
+                data: users
+            })
+
+
+    } catch (error) {
+            res.status(400).json({
+            err: error.message
+        })
+    }
+
+
+})
+
 
 module.exports = {
     profileRouter : router
