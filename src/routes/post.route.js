@@ -206,6 +206,33 @@ router.patch("/like/:postId", isLoggedIn, async (req, res) => {
   }
 })
 
+router.get("/getpost", isLoggedIn, async(req, res) => {
+  try {
+      const {skip} = req.query
+      const foundUser = req.user
+      const userId = foundUser._id
+      const followingIds = foundUser.following || []
+
+      const posts = await Post.find({
+        user: { $in: [userId, ...followingIds] },
+      })
+      .skip(skip)
+      .limit(10)
+      .populate("user", "username profileImage fullName")
+
+      res.status(200).json({
+        success: true,
+        posts,
+      })
+
+
+  } catch (error) {
+      res.status(400).json({
+        message : error.message
+      })
+  }
+})
+
 
 module.exports = {
     postRouter : router
